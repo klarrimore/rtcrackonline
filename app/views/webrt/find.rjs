@@ -1,0 +1,41 @@
+
+@options = { :scaffold_id => params[:scaffold_id], :action => "view", :id => 1 }
+@find_options = @options.merge(:action => "find", :id => params[:id])
+
+if @webrtArray.empty?
+  page.remove element_row_id(@find_options)  
+end
+
+if @successful
+  
+  remove_search_area = true
+  
+  1.upto(Webrt.count) do |i|
+    @options[:id] = i
+    page.remove element_row_id(@options)
+  end
+  
+  for webrt in @webrtArray
+    previous_element_row_id = remove_search_area ? element_row_id(@find_options) : element_row_id(@options)
+    @options[:id] = webrt.id
+
+    page.insert_html :bottom, scaffold_tbody_id(@options), :partial => 'webrt', :object => webrt, :locals => { :hidden => true }
+    page << "new TableRow.MoveBefore('#{previous_element_row_id}', '#{element_row_id(@options)}');"
+    page.remove element_row_id(@find_options) if remove_search_area
+    page.show element_row_id(@options)
+
+    remove_search_area = false
+  end
+
+  page << "AjaxScaffold.stripe('#{scaffold_tbody_id(@options)}');"
+  page << "AjaxScaffold.removeSortClasses('#{@options[:scaffold_id]}');"
+
+  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+  
+else
+  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+#  page.replace_html element_messages_id(@find_options), :partial => 'form_messages'
+#  page.hide loading_indicator_id(@find_options)
+end
+
+

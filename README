@@ -1,0 +1,59 @@
+
+INSTALL:
+
+Needed: Ruby (I used 1.8.4), and the following gems: actionmailer, actionpack, actionwebservice, activerecord, activesupport, memcache-client
+        mysql, rails, rake, sources, fcgi, optional: rmagick, captcha, progressbar
+
+Check what you have with "gem list", if you don't have something "gem install <package>"
+Copy the source to a suitable place in your file system, mine is in /var/www/localhost/rtcrackonline
+
+
+1. To setup Apache:
+
+(I'm using Apache 2.0.58)
+
+If you plan to use Apache set up a virtualhost similar to this one, of course replacing the directory structure with your's.
+
+<VirtualHost *:80>
+    SetEnv RAILS_ENV development
+    ServerAdmin you@shmoo.com
+    DocumentRoot /var/www/localhost/rtcrackonline/public/
+    ServerName rtcrackonline
+    ServerAlias rtcrackonline
+    ErrorLog /var/log/apache2/rtcrackonline-error_log
+    CustomLog /var/log/apache2/rtcrackonline-access_log common
+    <Directory /var/www/localhost/rtcrackonline/public/>
+      Allow from all
+      AllowOverride all
+      Order allow,deny
+    </Directory>
+    Options Indexes ExecCGI FollowSymLinks
+    RewriteEngine On
+</VirtualHost>
+
+
+If you want to just test it quickly without setting up Apache, once you reach the end of this README run "script/server" from the rails directory.
+
+* Check to see which version of Rails you have, then edit RAILS_GEM_VERSION in config/environment.rb 
+
+* Complile an rcrack for your OS, I left the source in app/cracker/rainbowcrack-freebsd/ and rainbowcrack-linux/, make sure you use the source I 
+included becuase I modified it
+
+* Copy over the compiled rcrack binary and the tables you wish to use to app/cracker/rcrack/
+(This version of rtcrackonline has only been tested with the alpha and alpha-numeric tables)
+
+* Create a database called webrt_development
+* Change the mysql login information in config/databases.yml
+* Run "rake migrate" from the rails directory
+
+* Edit additional config options in config/environment.rb
+
+A few of the following steps to get this thing running I would like to make automated in later versions.... 
+
+* Run script/server
+* Run ruby app/cracker/driver.rb
+(if you want the dns feature) Run ruby app/dns/dns_server.rb
+
+* Access the interface at <ip>:3000/webrt if you're using Webrick
+
+Any problems: keith@email.arizona.edu
