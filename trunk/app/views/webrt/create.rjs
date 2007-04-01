@@ -1,0 +1,37 @@
+logger.info("DEBUG: webrtArray=#{@webrtArray.inspect} #{@webrtArray.empty?}")
+
+if @webrtArray.empty?
+  @options = { :scaffold_id => params[:scaffold_id], :action => "view", :id => 1 } 
+else
+  @options = { :scaffold_id => params[:scaffold_id], :action => "view", :id => @webrtArray[0].id } 
+end  
+
+  @create_options = @options.merge(:action => "create", :id => params[:id])
+
+if @successful
+  
+  remove_create_area = true
+
+  for webrt in @webrtArray
+    previous_element_row_id = remove_create_area ? element_row_id(@create_options) : element_row_id(@options)
+    @options[:id] = webrt.id
+
+    page.insert_html :bottom, scaffold_tbody_id(@options), :partial => 'webrt', :object => webrt, :locals => { :hidden => true }
+    page << "new TableRow.MoveBefore('#{previous_element_row_id}', '#{element_row_id(@options)}');"
+    page.remove element_row_id(@create_options) if remove_create_area
+    page.show element_row_id(@options)
+
+    remove_create_area = false
+  end
+
+  page << "AjaxScaffold.stripe('#{scaffold_tbody_id(@options)}');"
+  page << "AjaxScaffold.removeSortClasses('#{@options[:scaffold_id]}');"
+
+  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+  
+else
+  page.replace_html element_messages_id(@create_options), :partial => 'form_messages'
+  page.hide loading_indicator_id(@create_options)
+end
+
+

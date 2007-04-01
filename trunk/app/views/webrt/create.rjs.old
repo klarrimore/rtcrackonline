@@ -1,0 +1,30 @@
+@options = { :scaffold_id => params[:scaffold_id], :action => "view", :id => 1 }
+@create_options = @options.merge(:action => "create", :id => params[:id])
+
+if @successful
+  $stderr.print "Options: #{@options}\n"
+  page.insert_html :bottom, scaffold_tbody_id(@options), :partial => 'webrt', :locals => { :hidden => true }
+  page << "new TableRow.MoveAfter('#{element_row_id(@create_options)}', '#{element_row_id(@options)}');"
+  page.remove element_row_id(@create_options)
+  page.show element_row_id(@options) 
+  $stderr.print "1st create options " + element_row_id(@create_options) + "\n"
+  $stderr.print "1st options " + element_row_id(@options) + "\n"
+#  page << "AjaxScaffold.stripe('#{scaffold_tbody_id(@options)}');" 
+#  page << "AjaxScaffold.removeSortClasses('#{@options[:scaffold_id]}');"
+#  page.replace_html scaffold_messages_id(@options), :partial => 'messages'
+
+  @options2 = { :scaffold_id => params[:scaffold_id], :action => "view", :id => 2 }
+  @create_options2 = @options2.merge(:action => "create", :id => params[:id])
+  
+  $stderr.print "2nd create options " + element_row_id(@create_options2) + "\n"
+  $stderr.print "2nd options " + element_row_id(@options2) + "\n"
+  page.insert_html :bottom, scaffold_tbody_id(@options), :partial => 'webrt', :locals => { :hidden => true }
+  page << "new TableRow.MoveAfter('#{element_row_id(@create_options)}', '#{element_row_id(@options2)}');"
+  page.show element_row_id(@options2)
+	
+else
+  page.replace_html element_messages_id(@create_options), :partial => 'form_messages'
+  page.hide loading_indicator_id(@create_options)
+end
+
+

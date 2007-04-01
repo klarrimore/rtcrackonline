@@ -1,0 +1,59 @@
+<fieldset>
+
+<div class="row">
+<div class="form-element">
+  <label for="webrt_lmhash">LMhash</label>
+  <%= text_field 'webrt', 'lmhash', 'index' => 0, :class=>"text-input" %> 
+</div>
+
+<div class="form-element">
+  <label for="webrt_email">Email</label>
+  <%= text_field 'webrt', 'email', :class=>"email-input" %>
+</div>
+</div>
+    
+
+<!--
+<div class="form-element">
+  <label for="webrt_lmhash">Hash 2</label>
+  <%= text_field 'webrt', 'lmhash', 'index' => 1, :class=>"text-input" %> 
+</div>    
+
+<div class="form-element">
+  <label for="webrt_lmhash">Hash 3</label>
+  <%= text_field 'webrt', 'lmhash', 'index' => 2, :class=>"text-input" %> 
+</div>
+
+<div class="form-element">
+  <label for="webrt_lmhash">Hash 4</label>
+  <%= text_field 'webrt', 'lmhash', 'index' => 3, :class=>"text-input" %> 
+</div>
+</div>
+
+#***Captcha***#
+<div class="row">
+<div class="form-element">
+  <% # c = prepare_captcha  
+  -%>
+  <%= # captcha_hidden_field c, 'webrt' 
+  %>
+  <%= # captcha_image_tag c 
+  %>
+</div>
+</div>
+
+<div class="row">
+<div class="form-element">
+  <label for="captcha">Code</label>
+  <%= # captcha_text_field 'webrt', {:class=>"text-input"} 
+  %>
+</div>
+
+<div class="form-element">
+  <label for="webrt_email">Email</label>
+  <%= text_field 'webrt', 'email' , {:class=>"text-input"} %>
+</div> 
+</div>
+-->
+
+</fieldset>
