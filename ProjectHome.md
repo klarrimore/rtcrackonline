@@ -1,0 +1,1 @@
+rtcrackonline is a web-based password cracker written with RoR.  It is currently capable of cracking unsalted md5 passwords.
